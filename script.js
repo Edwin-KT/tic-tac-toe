@@ -1,7 +1,9 @@
-const gameboard = (function () {
-  const rows = 3,
-    cols = 3;
-  let array = Array(rows)
-    .fill()
-    .map(() => Array(cols).fill(0));
-})();
+function createPlayer(number) {
+  let name = "Player " + number;
+  let wins = 0;
+
+  const setName = (playerName) => (name = playerName);
+  const incrementWins = () => wins++;
+
+  return { name, number, wins, setName, incrementWins };
+}
