@@ -19,5 +19,30 @@ const gameBoard = (function () {
     array.forEach((row) => row.fill(0));
   };
 
+  const isWinner = (row, col) => {
+    let rowCounter = 0,
+      colCounter = 0,
+      diagonalCounter = 0;
+    for (let i = 1; i < 3; i++) {
+      if (array[row][i] === array[row][i - 1]) rowCounter++;
+      if (array[i][col] === array[i - 1][col]) colCounter++;
+    }
+    if (row === col) {
+      if (array[0][0] === array[1][1] && array[1][1] === array[2][2])
+        return true;
+      if (array[2][0] === array[1][1] && array[0][2] === array[1][1])
+        return true;
+    }
+    return rowCounter === 3 || colCounter === 3 || diagonalCounter === 3;
+  };
+
   return { array, resetTable };
+})();
+
+const gameController = (function () {
+  const startGame = () => {
+    gameBoard.resetTable();
+  };
+
+  return { startGame, restartGame };
 })();
