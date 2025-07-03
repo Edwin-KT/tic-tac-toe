@@ -1,0 +1,31 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#game-container {
+  border: 2px solid black;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(10%, 0.1fr));
+  gap: 10px;
+}
+
+.cell {
+  position: relative;
+  border: 1px solid;
+  box-sizing: border-box;
+}
+
+.cell::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.cell .content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
