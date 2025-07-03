@@ -6,6 +6,7 @@ body {
   min-height: 100vh;
   margin: 0;
   gap: 2rem;
+  font-family: "Fjord One", serif;
 }
 
 #game-container {
