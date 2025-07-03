@@ -99,8 +99,9 @@ const gameController = (function () {
     displayController.drawTable();
 
     if (isWinner(row, col)) {
-      console.log(`${currentPlayer.name} won!`);
-      displayController.drawStatus(`${currentPlayer.name} won!`);
+      displayController.drawStatus(
+        `${currentPlayer.name} won! It's ${currentPlayer.name} turn`
+      );
       currentPlayer.incrementWins();
       startGame();
       return;
@@ -108,8 +109,7 @@ const gameController = (function () {
 
     incrementMoves();
     if (getMoves() >= 9) {
-      console.log("Draw!");
-      displayController.drawStatus("Draw!");
+      displayController.drawStatus("Draw! It's ${currentPlayer.name} turn");
       startGame();
       return;
     }
@@ -120,7 +120,6 @@ const gameController = (function () {
     gameBoard.resetTable();
     moves = 0;
     displayController.drawTable();
-    displayController.drawStatus(`It's ${currentPlayer.name}'s turn`);
   };
 
   const incrementMoves = () => moves++;
@@ -144,3 +143,6 @@ const gameController = (function () {
 })();
 
 gameController.startGame();
+displayController.drawStatus(
+  `It's ${gameController.getCurrentPlayer().name}'s turn`
+);
