@@ -1,31 +1,35 @@
 body {
   display: flex;
+  justify-content: center;
   flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
 }
 
 #game-container {
   border: 2px solid black;
   display: grid;
-  grid-template-columns: repeat(3, minmax(10%, 0.1fr));
+  grid-template-columns: repeat(3, 8vw);
+  grid-template-rows: repeat(3, 8vw);
   gap: 10px;
+  padding: 2%;
 }
 
 .cell {
-  position: relative;
   border: 1px solid;
   box-sizing: border-box;
-}
-
-.cell::before {
-  content: "";
-  display: block;
-  padding-top: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cell .content {
-  position: absolute;
-  top: 0;
-  left: 0;
   height: 100%;
   width: 100%;
+}
+
+.symbol-img {
+  width: 100%;
+  height: 100%;
 }
