@@ -20,29 +20,78 @@ const gameBoard = (function () {
   };
 
   const isWinner = (row, col) => {
-    let rowCounter = 0,
-      colCounter = 0,
-      diagonalCounter = 0;
-    for (let i = 1; i < 3; i++) {
-      if (array[row][i] === array[row][i - 1]) rowCounter++;
-      if (array[i][col] === array[i - 1][col]) colCounter++;
+    const player = array[row][col];
+    if (player === 0) return false; // Empty cell can't win
+
+    // Check row
+    if (
+      array[row][0] === player &&
+      array[row][1] === player &&
+      array[row][2] === player
+    ) {
+      return true;
     }
+
+    // Check column
+    if (
+      array[0][col] === player &&
+      array[1][col] === player &&
+      array[2][col] === player
+    ) {
+      return true;
+    }
+
+    // Check main diagonal (top-left to bottom-right)
     if (row === col) {
-      if (array[0][0] === array[1][1] && array[1][1] === array[2][2])
+      if (
+        array[0][0] === player &&
+        array[1][1] === player &&
+        array[2][2] === player
+      ) {
         return true;
-      if (array[2][0] === array[1][1] && array[0][2] === array[1][1])
-        return true;
+      }
     }
-    return rowCounter === 3 || colCounter === 3 || diagonalCounter === 3;
+
+    // Check anti-diagonal (top-right to bottom-left)
+    if (row + col === 2) {
+      if (
+        array[0][2] === player &&
+        array[1][1] === player &&
+        array[2][0] === player
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   };
 
-  return { array, resetTable };
+  const displayArray = () => {
+    console.log("Current Game Board:");
+    array.forEach((row) => console.log(row.join(" | ")));
+    console.log("------------------");
+  };
+
+  const chooseCell = (row, col, player) => {
+    array[row][col] = player.number;
+    displayArray();
+    if (isWinner(row, col)) {
+      console.log(`${player.name} won!`);
+      gameController.startGame();
+    }
+  };
+  return { array, resetTable, isWinner, chooseCell };
 })();
 
 const gameController = (function () {
+  const Player1 = createPlayer(1);
+  const Player2 = createPlayer(2);
+
   const startGame = () => {
     gameBoard.resetTable();
   };
+
+  const restartGame = () => {};
 
   return { startGame, restartGame };
 })();
