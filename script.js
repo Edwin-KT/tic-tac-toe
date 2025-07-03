@@ -15,83 +15,11 @@ const gameBoard = (function () {
     .fill()
     .map(() => Array(cols).fill(0));
 
-  const resetTable = () => {
-    table.forEach((row) => row.fill(0));
-  };
+  const resetTable = () => table.forEach((row) => row.fill(0));
+  const getCell = (row, col) => table[row][col];
+  const setCell = (row, col, value) => (table[row][col] = value);
 
-  const isWinner = (row, col) => {
-    const player = table[row][col];
-    if (player === 0) return false; // Empty cell can't win
-
-    // Check row
-    if (
-      table[row][0] === player &&
-      table[row][1] === player &&
-      table[row][2] === player
-    ) {
-      return true;
-    }
-
-    // Check column
-    if (
-      table[0][col] === player &&
-      table[1][col] === player &&
-      table[2][col] === player
-    ) {
-      return true;
-    }
-
-    // Check main diagonal (top-left to bottom-right)
-    if (row === col) {
-      if (
-        table[0][0] === player &&
-        table[1][1] === player &&
-        table[2][2] === player
-      ) {
-        return true;
-      }
-    }
-
-    // Check anti-diagonal (top-right to bottom-left)
-    if (row + col === 2) {
-      if (
-        table[0][2] === player &&
-        table[1][1] === player &&
-        table[2][0] === player
-      ) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-  const displayArray = () => {
-    console.log("Current Game Board:");
-    table.forEach((row) => console.log(row.join(" | ")));
-    console.log("------------------");
-  };
-
-  const chooseCell = (row, col, player) => {
-    if (table[row][col] !== 0) return;
-    table[row][col] = player.number;
-    displayArray();
-    if (isWinner(row, col)) {
-      console.log(`${player.name} won!`);
-      player.incrementWins();
-      gameController.startGame();
-      return;
-    } else {
-      gameController.switchPlayer();
-      displayController.drawTable();
-    }
-    gameController.incrementMoves();
-    if (gameController.getMoves() >= 9) {
-      console.log("Draw!");
-      gameController.startGame();
-    }
-  };
-  return { table, resetTable, isWinner, chooseCell };
+  return { table, resetTable, getCell, setCell };
 })();
 
 const displayController = (function () {
@@ -114,8 +42,7 @@ const displayController = (function () {
         cellDiv.dataset.col = colIndex;
 
         cellDiv.addEventListener("click", () => {
-          const currentPlayer = gameController.getCurrentPlayer();
-          gameBoard.chooseCell(rowIndex, colIndex, currentPlayer);
+          gameController.chooseCell(rowIndex, colIndex);
         });
         gameContainer.appendChild(cellDiv);
       });
@@ -131,6 +58,52 @@ const gameController = (function () {
   let currentPlayer = Player1;
   let moves = 0;
 
+  const isWinner = (row, col) => {
+    const player = gameBoard.getCell(row, col);
+    if (player === 0) return false;
+
+    if ([0, 1, 2].every((c) => gameBoard.getCell(row, c) === player))
+      return true;
+
+    if ([0, 1, 2].every((r) => gameBoard.getCell(r, col) === player))
+      return true;
+
+    if (
+      row === col &&
+      [0, 1, 2].every((i) => gameBoard.getCell(i, i) === player)
+    )
+      return true;
+    if (
+      row + col === 2 &&
+      [0, 1, 2].every((i) => gameBoard.getCell(i, 2 - i) === player)
+    )
+      return true;
+
+    return false;
+  };
+
+  const chooseCell = (row, col) => {
+    if (gameBoard.getCell(row, col) !== 0) return;
+
+    gameBoard.setCell(row, col, currentPlayer.number);
+    displayController.drawTable();
+
+    if (isWinner(row, col)) {
+      console.log(`${currentPlayer.name} won!`);
+      currentPlayer.incrementWins();
+      startGame();
+      return;
+    }
+
+    incrementMoves();
+    if (getMoves() >= 9) {
+      console.log("Draw!");
+      startGame();
+      return;
+    }
+
+    switchPlayer();
+  };
   const startGame = () => {
     gameBoard.resetTable();
     moves = 0;
@@ -152,6 +125,7 @@ const gameController = (function () {
     incrementMoves,
     switchPlayer,
     getCurrentPlayer,
+    chooseCell,
   };
 })();
 
