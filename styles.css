@@ -9,6 +9,11 @@ body {
   font-family: "Fjord One", serif;
 }
 
+.title {
+  margin-bottom: 0;
+  font-size: 3rem;
+}
+
 #game-container {
   border: 2px solid black;
   display: grid;
