@@ -24,6 +24,11 @@ const gameBoard = (function () {
 
 const displayController = (function () {
   const gameContainer = document.querySelector("#game-container");
+  const statusContainer = document.querySelector("#game-status");
+
+  const drawStatus = (message) => {
+    statusContainer.textContent = message;
+  };
 
   const drawTable = () => {
     gameContainer.innerHTML = "";
@@ -54,7 +59,7 @@ const displayController = (function () {
     });
   };
 
-  return { drawTable };
+  return { drawTable, drawStatus };
 })();
 
 const gameController = (function () {
@@ -95,6 +100,7 @@ const gameController = (function () {
 
     if (isWinner(row, col)) {
       console.log(`${currentPlayer.name} won!`);
+      displayController.drawStatus(`${currentPlayer.name} won!`);
       currentPlayer.incrementWins();
       startGame();
       return;
@@ -103,6 +109,7 @@ const gameController = (function () {
     incrementMoves();
     if (getMoves() >= 9) {
       console.log("Draw!");
+      displayController.drawStatus("Draw!");
       startGame();
       return;
     }
@@ -113,6 +120,7 @@ const gameController = (function () {
     gameBoard.resetTable();
     moves = 0;
     displayController.drawTable();
+    displayController.drawStatus(`It's ${currentPlayer.name}'s turn`);
   };
 
   const incrementMoves = () => moves++;
@@ -121,6 +129,7 @@ const gameController = (function () {
 
   const switchPlayer = () => {
     currentPlayer = currentPlayer === Player1 ? Player2 : Player1;
+    displayController.drawStatus(`It's ${currentPlayer.name}'s turn`);
   };
 
   const getCurrentPlayer = () => currentPlayer;
