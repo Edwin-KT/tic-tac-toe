@@ -109,7 +109,7 @@ const gameController = (function () {
 
     incrementMoves();
     if (getMoves() >= 9) {
-      displayController.drawStatus("Draw! It's ${currentPlayer.name} turn");
+      displayController.drawStatus(`Draw! It's ${currentPlayer.name}'s turn`);
       startGame();
       return;
     }
