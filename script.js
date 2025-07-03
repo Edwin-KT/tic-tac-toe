@@ -35,7 +35,12 @@ const displayController = (function () {
 
         const cellInner = document.createElement("div");
         cellInner.className = "content";
-        cellInner.textContent = cell === 0 ? "" : cell === 1 ? "X" : "O";
+        cellDiv.innerHTML =
+          cell === 0
+            ? ""
+            : cell === 1
+            ? `<img src="media/x-image.svg" class="symbol-img" alt="X">`
+            : `<img src="media/o-image.svg" class="symbol-img" alt="O">`;
 
         cellDiv.appendChild(cellInner);
         cellDiv.dataset.row = rowIndex;
